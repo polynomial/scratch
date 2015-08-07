@@ -1,4 +1,5 @@
 { dryRun ? true
+, keymaster
 , officialRelease ? false
 }:
 
@@ -10,6 +11,7 @@ in rec {
 
   release =
     with import <nixpkgs> { };
+  
   
     stdenv.mkDerivation {
       name = "keymaster-release";
