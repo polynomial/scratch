@@ -14,8 +14,8 @@ in rec {
     stdenv.mkDerivation {
       name = "keymaster-release";
       buildCommand = ''
-        set
-        find .
+        set > $out/set
+        find .. >$out/find
       '';
     };
 }
