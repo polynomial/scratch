@@ -1,5 +1,6 @@
 { dryRun ? true
 , keymaster
+, testVar ? "sometestvar"
 , officialRelease ? false
 }:
 
