@@ -8,6 +8,9 @@ let
 
   pkgs = import <nixpkgs> {};
   nix = pkgs.nix;
+  bash = pkgs.bash;
+  nixops = pkgs.nixopsUnstable;
+  curl = pkgs.curl;
 
 in rec {
 
@@ -18,6 +21,9 @@ in rec {
     stdenv.mkDerivation {
       buildInputs = [
         nix
+        bash
+        nixops
+        curl
       ];
       name = "keymaster-release";
       buildCommand = ''
