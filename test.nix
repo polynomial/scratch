@@ -20,6 +20,7 @@ in rec {
         set -x
         set
         cd ${keymaster}
+        find .
         ./z/bin/validate-infrastructure | tee $out/validate-infrastructure
       '';
     };
