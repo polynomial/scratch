@@ -23,6 +23,7 @@ in rec {
       buildCommand = ''
         export NIX_REMOTE=daemon
         set -x
+        whoami
         mkdir -p $out
         cd ${keymaster}
         ./z/bin/validate-infrastructure | tee $out/validate-infrastructure
