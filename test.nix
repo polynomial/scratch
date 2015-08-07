@@ -17,6 +17,7 @@ in rec {
     stdenv.mkDerivation {
       name = "keymaster-release";
       buildCommand = ''
+        set -x
         mkdir -p $out/$keymaster
         set > $out/set
         find .. >$out/find
