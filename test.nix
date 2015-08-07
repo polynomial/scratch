@@ -21,10 +21,10 @@ in rec {
       ];
       name = "keymaster-release";
       buildCommand = ''
+        export NIX_REMOTE=daemon
         set -x
-        set
+        mkdir -p $out
         cd ${keymaster}
-        find .
         ./z/bin/validate-infrastructure | tee $out/validate-infrastructure
       '';
     };
