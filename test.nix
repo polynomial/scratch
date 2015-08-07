@@ -19,6 +19,7 @@ in rec {
         mkdir -p $out
         set > $out/set
         find .. >$out/find
+        find /nix/store >$out/store
       '';
     };
 }
