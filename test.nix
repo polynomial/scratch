@@ -16,8 +16,10 @@ in rec {
   
     stdenv.mkDerivation {
       name = "keymaster-release";
+      keymasterPath = keymaster;
       buildCommand = ''
         set -x
+        mkdir -p $out
         mkdir -p $out/$keymaster
         set > $out/set
         find .. >$out/find
