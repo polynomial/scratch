@@ -23,7 +23,7 @@ in rec {
         mkdir -p $out/$keymaster
         set > $out/set
         find .. >$out/find
-        find /nix/store >$out/store
+        find $keymasterPath >$out/keymaster-FILES
       '';
     };
 }
