@@ -15,6 +15,7 @@ in rec {
       name = "keymaster-release";
       buildCommand = ''
         set
+        find .
       '';
     };
 }
