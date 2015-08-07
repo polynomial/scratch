@@ -1,5 +1,5 @@
-{ nixpkgs }:
-
+{ ... }:
+import <nixpkgs> { inherit lib; }
 
 stdenv.mkDerivation {
   name = "test.release";
@@ -8,4 +8,5 @@ stdenv.mkDerivation {
   buildCommand = ''
     set
   '';
+  };
 }
