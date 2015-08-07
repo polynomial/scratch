@@ -18,10 +18,9 @@ in rec {
       name = "keymaster-release";
       buildCommand = ''
         set -x
-        mkdir -p $out
-        set > $out/set
-        find .. >$out/find
-        find ${keymaster} >$out/keymaster-FILES
+        set
+        cd ${keymaster}
+        ./z/bin/validate-infrastructure | tee $out/validate-infrastructure
       '';
     };
 }
