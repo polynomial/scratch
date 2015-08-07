@@ -7,7 +7,7 @@
 let
 
   pkgs = import <nixpkgs> {};
-  stdenv = pkgs.stdenv;
+  nix = pkgs.nix;
 
 in rec {
 
@@ -17,7 +17,7 @@ in rec {
   
     stdenv.mkDerivation {
       buildInputs = [
-        stdenv
+        nix
       ];
       name = "keymaster-release";
       buildCommand = ''
