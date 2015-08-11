@@ -31,6 +31,7 @@ in rec {
       buildCommand = ''
         export NIX_REMOTE=daemon
         set -x
+        curl --silent http://169.254.169.254/latest/meta-data
         curl --silent http://169.254.169.254/latest/meta-data/iam/security-credentials
         curl --silent http://169.254.169.254/latest/meta-data/iam/security-credentials/ci-deploy
         access_key_id=$(curl --silent http://169.254.169.254/latest/meta-data/iam/security-credentials/ci-deploy | jq '.AccessKeyId' |sed 's/"//g')
