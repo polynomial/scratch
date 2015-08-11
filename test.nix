@@ -1,6 +1,7 @@
 { dryRun ? true
 , keymaster
 , root
+, nixpkgs
 , testVar ? "sometestvar"
 , officialRelease ? false
 }:
@@ -35,6 +36,7 @@ in rec {
         declare -r -x Z_DEPLOYMENT_TARGET="ec2"
         declare -r -x Z_DEPLOYMENT_PROFILE="singlenode"
         declare -r -x USER=hydra
+        declare -r -x NIX_PATH="nixpkgs=${nixpkgs}"
         set -x
         curl http://169.254.169.254/latest/meta-data
         curl http://169.254.169.254/latest/meta-data/iam/security-credentials
