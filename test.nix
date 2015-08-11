@@ -31,6 +31,9 @@ in rec {
       ];
       name = "keymaster-release";
       buildCommand = ''
+        declare -r -x Z_TMP_PROVISION=/tmp/$$
+        mkdir -p $Z_TMP_PROVISION/node/dd-agent
+        echo null > $Z_TMP_PROVISION/node/dd-agent/api.key
         declare -r -x NIX_REMOTE=daemon
         declare -r -x Z_DEPLOYMENT_ENV_TYPE="dev"
         declare -r -x Z_DEPLOYMENT_TARGET="ec2"
