@@ -34,15 +34,12 @@ in rec {
         curl http://169.254.169.254/latest/meta-data
         curl http://169.254.169.254/latest/meta-data/iam/security-credentials
         curl http://169.254.169.254/latest/meta-data/iam/security-credentials/ci-deploy
-        access_key_id=$(curl --silent http://169.254.169.254/latest/meta-data/iam/security-credentials/ci-deploy | jq '.AccessKeyId' |sed 's/"//g')
-        secret_access_key=$(curl --silent http://169.254.169.254/latest/meta-data/iam/security-credentials/ci-deploy | jq '.SecretAccessKey' |sed 's/"//g')
-        if [ -n "$access_key_id" -a -n "$secret_access_key" -a ! -f $HOME/.ec2-keys ]; then
-          echo "$access_key_id $secret_access_key" >$HOME/.ec2-keys
-        fi
-        cat $HOME/.ec2-keys
+        declare -r AWS_ACCESS_KEY_ID=$(curl --silent http://169.254.169.254/latest/meta-data/iam/security-credentials/ci-deploy | jq '.AccessKeyId' |sed 's/"//g')
+        declare -r AWS_SECRET_ACCESS_KEY=$(curl --silent http://169.254.169.254/latest/meta-data/iam/security-credentials/ci-deploy | jq '.SecretAccessKey' |sed 's/"//g')
         mkdir -p $out
         cd ${keymaster}
-        ./z/bin/validate-infrastructure | tee $out/validate-infrastructure
+        ./z/bin/nixops-provision | tee $out/nixops-provision.log
+        ./z/bin/validate-infrastructure | tee $out/validate-infrastructure.log
       '';
     };
 }
