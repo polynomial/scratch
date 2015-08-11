@@ -31,9 +31,12 @@ in rec {
       ];
       name = "keymaster-release";
       buildCommand = ''
-        declare -r -x Z_TMP_PROVISION=/tmp/$$
-        mkdir -p $Z_TMP_PROVISION/node/dd-agent
-        echo null > $Z_TMP_PROVISION/node/dd-agent/api.key
+        mkdir -p $out
+        cd ${root}
+        source z/setup/env.sh
+        declare -r -x Z_PROVISION_TMP=true
+        mkdir -p $TMPDIR/node/dd-agent
+        echo null > $TMPDIR/node/dd-agent/api.key
         declare -r -x NIX_REMOTE=daemon
         declare -r -x Z_DEPLOYMENT_ENV_TYPE="dev"
         declare -r -x Z_DEPLOYMENT_TARGET="ec2"
@@ -46,9 +49,6 @@ in rec {
         curl http://169.254.169.254/latest/meta-data/iam/security-credentials/ci-deploy
         declare -r -x AWS_ACCESS_KEY_ID=$(curl --silent http://169.254.169.254/latest/meta-data/iam/security-credentials/ci-deploy | jq '.AccessKeyId' |sed 's/"//g')
         declare -r -x AWS_SECRET_ACCESS_KEY=$(curl --silent http://169.254.169.254/latest/meta-data/iam/security-credentials/ci-deploy | jq '.SecretAccessKey' |sed 's/"//g')
-        mkdir -p $out
-        cd ${root}
-        source z/setup/env.sh
         cd ${keymaster}
         ./z/bin/nixops-provision | tee $out/nixops-provision.log
         ./z/bin/validate-infrastructure | tee $out/validate-infrastructure.log
