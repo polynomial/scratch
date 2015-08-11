@@ -1,5 +1,6 @@
 { dryRun ? true
 , keymaster
+, root
 , testVar ? "sometestvar"
 , officialRelease ? false
 }:
@@ -40,6 +41,8 @@ in rec {
         declare -r -x AWS_ACCESS_KEY_ID=$(curl --silent http://169.254.169.254/latest/meta-data/iam/security-credentials/ci-deploy | jq '.AccessKeyId' |sed 's/"//g')
         declare -r -x AWS_SECRET_ACCESS_KEY=$(curl --silent http://169.254.169.254/latest/meta-data/iam/security-credentials/ci-deploy | jq '.SecretAccessKey' |sed 's/"//g')
         mkdir -p $out
+        cd ${root}
+        source z/setup/env.sh
         cd ${keymaster}
         ./z/bin/nixops-provision | tee $out/nixops-provision.log
         ./z/bin/validate-infrastructure | tee $out/validate-infrastructure.log
