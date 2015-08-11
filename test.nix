@@ -29,7 +29,10 @@ in rec {
       ];
       name = "keymaster-release";
       buildCommand = ''
-        export NIX_REMOTE=daemon
+        export -r NIX_REMOTE=daemon
+        export -r Z_DEPLOYMENT_ENV_TYPE="dev"
+        export -r Z_DEPLOYMENT_TARGET="ec2"
+        export -r Z_DEPLOYMENT_PROFILE="singlenode"
         set -x
         curl http://169.254.169.254/latest/meta-data
         curl http://169.254.169.254/latest/meta-data/iam/security-credentials
