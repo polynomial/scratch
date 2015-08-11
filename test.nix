@@ -9,6 +9,7 @@ let
   pkgs = import <nixpkgs> {};
   nix = pkgs.nix;
   bash = pkgs.bash;
+  jq = pkgs.jq;
   nixops = pkgs.nixopsUnstable;
   curl = pkgs.curl;
 
@@ -24,6 +25,7 @@ in rec {
         bash
         nixops
         curl
+        jq
       ];
       name = "keymaster-release";
       buildCommand = ''
