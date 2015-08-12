@@ -36,6 +36,7 @@ in rec {
       buildCommand = ''
         set -x
         ls -ld /nix/store/*git*
+        find /nix/store -type d -name .git
         mkdir -p $out
         cd ${root}
         find .
