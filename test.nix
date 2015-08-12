@@ -1,6 +1,7 @@
 { dryRun ? true
 , keymaster
 , root
+, toor
 , nixpkgs
 , officialRelease ? true
 }:
@@ -37,6 +38,8 @@ in rec {
         set -x
         mkdir -p $out
         cd ${root}
+        find .
+        cd ${toor}
         find .
         #date >$out/date
         source z/setup/env.sh
