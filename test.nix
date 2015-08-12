@@ -36,6 +36,7 @@ in rec {
       name = "keymaster-release";
       buildCommand = ''
         set -x
+        ls -ld /nix/store/*git*
         mkdir -p $out
         cd ${root}
         find .
