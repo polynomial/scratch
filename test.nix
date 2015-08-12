@@ -2,7 +2,6 @@
 , keymaster
 , root
 , nixpkgs
-, testVar ? "sometestvar"
 , officialRelease ? false
 }:
 
@@ -45,6 +44,7 @@ in rec {
         declare -r -x Z_DEPLOYMENT_TARGET="ec2"
         declare -r -x Z_DEPLOYMENT_PROFILE="singlenode"
         declare -r -x USER=hydra
+        declare -r -x test=blah
         declare -r -x NIX_PATH="nixpkgs=${nixpkgs}"
         declare -r -x NIXOPS_STATE=${Z_DEPLOYMENT_TMPDIR}/nixops.state
         set
