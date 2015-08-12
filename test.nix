@@ -38,6 +38,7 @@ in rec {
         source z/setup/env.sh
         declare -r -x Z_DEPLOYMENT_TMPDIR=/tmp/$$
         mkdir -p $Z_DEPLOYMENT_TMPDIR
+        declare -x HOME=$Z_DEPLOYMENT_TMPDIR
         declare -r -x DD_AGENT_KEY=null
         declare -r -x NIX_REMOTE=daemon
         declare -r -x Z_DEPLOYMENT_ENV_TYPE="dev"
