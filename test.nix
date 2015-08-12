@@ -1,7 +1,6 @@
 { dryRun ? true
 , keymaster
 , root
-, toor
 , nixpkgs
 , officialRelease ? true
 }:
@@ -39,8 +38,6 @@ in rec {
         ls -ld /nix/store/*git*
         mkdir -p $out
         cd ${root}
-        find .
-        cd ${toor}
         find .
         #date >$out/date
         source z/setup/env.sh
