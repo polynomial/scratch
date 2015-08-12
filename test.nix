@@ -44,6 +44,7 @@ in rec {
         declare -r -x Z_DEPLOYMENT_ENV_TYPE="dev"
         declare -r -x Z_DEPLOYMENT_TARGET="ec2"
         declare -r -x Z_DEPLOYMENT_PROFILE="singlenode"
+        declare -r -x aws=test
         declare -r -x USER=hydra
         declare -r -x NIX_PATH="nixpkgs=${nixpkgs}"
         declare -r -x NIXOPS_STATE="$Z_DEPLOYMENT_TMPDIR/state.nixops"
