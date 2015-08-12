@@ -51,7 +51,7 @@ in rec {
         declare -r -x AWS_SECRET_ACCESS_KEY=$(curl --silent http://169.254.169.254/latest/meta-data/iam/security-credentials/ci-deploy | jq '.SecretAccessKey' |sed 's/"//g')
         set
         cd ${keymaster}
-        ./z/bin/nixops-provision | tee $out/nixops-provision.log
+        bash -x ./z/bin/nixops-provision | tee $out/nixops-provision.log
         ./z/bin/validate-infrastructure | tee $out/validate-infrastructure.log
       '';
     };
