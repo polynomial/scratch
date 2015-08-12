@@ -35,12 +35,9 @@ in rec {
       name = "keymaster-release";
       buildCommand = ''
         set -x
-        ls -ld /nix/store/*git*
-        find /nix/store -type d -name .git
         mkdir -p $out
         cd ${root}
-        find .
-        #date >$out/date
+        date >$out/date
         source z/setup/env.sh
         declare -r -x Z_DEPLOYMENT_TMPDIR=/tmp/$$
         mkdir -p $Z_DEPLOYMENT_TMPDIR
@@ -56,7 +53,6 @@ in rec {
         #declare -r -x AWS_ACCESS_KEY_ID="$(curl --silent http://169.254.169.254/latest/meta-data/iam/security-credentials/ci-deploy | jq '.AccessKeyId' |sed 's/"//g')"
         #declare -r -x AWS_SECRET_ACCESS_KEY="$(curl --silent http://169.254.169.254/latest/meta-data/iam/security-credentials/ci-deploy | jq '.SecretAccessKey' |sed 's/"//g')"
         #declare -r -x AWS_SECURITY_TOKEN="$(curl --silent http://169.254.169.254/latest/meta-data/iam/security-credentials/ci-deploy | jq '.Token' |sed 's/"//g')"
-        set | grep EC2
         set
         cd ${keymaster}
         find .
