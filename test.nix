@@ -34,9 +34,8 @@ in rec {
         mkdir -p $out
         cd ${root}
         source z/setup/env.sh
-        declare -r -x Z_PROVISION_TMP=true
-        mkdir -p $TMPDIR/node/dd-agent
-        echo null > $TMPDIR/node/dd-agent/api.key
+        declare -r -x Z_PROVISION_TMPDIR=$(mktemp -d ${TMPDIR:-/tmp}/XXXXXXX)
+        declare -r -x DD_AGENT_KEY=null
         declare -r -x NIX_REMOTE=daemon
         declare -r -x Z_DEPLOYMENT_ENV_TYPE="dev"
         declare -r -x Z_DEPLOYMENT_TARGET="ec2"
