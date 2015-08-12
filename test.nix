@@ -42,6 +42,7 @@ in rec {
         declare -r -x Z_DEPLOYMENT_PROFILE="singlenode"
         declare -r -x USER=hydra
         declare -r -x NIX_PATH="nixpkgs=${nixpkgs}"
+        set
         set -x
         curl http://169.254.169.254/latest/meta-data
         curl http://169.254.169.254/latest/meta-data/iam/security-credentials
