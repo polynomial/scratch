@@ -63,9 +63,9 @@ in rec {
         aws --region us-west-1 ec2 describe-instances | grep -c .
         set | grep EC2
         set | grep AWS
-        export Z_ROOT_DIR="$(pwd)/z/etc"
-        nixops create -d keymaster-dev-hydra-ec2-singlenode z/etc/service/targets/ec2.nix
-        strace -fff -o /tmp/deploy.$$ nixops deploy -d keymaster-dev-hydra-ec2-singlenode --show-trace --allow-recreate
+        #export Z_ROOT_DIR="$(pwd)/z/etc"
+        #nixops create -d keymaster-dev-hydra-ec2-singlenode z/etc/service/targets/ec2.nix
+        #strace -fff -o /tmp/deploy.$$ nixops deploy -d keymaster-dev-hydra-ec2-singlenode --show-trace --allow-recreate
         bash -x ./z/bin/nixops-provision | tee $out/nixops-provision.log
         ./z/bin/validate-infrastructure | tee $out/validate-infrastructure.log
       '';
