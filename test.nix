@@ -59,6 +59,7 @@ in rec {
         cd ${keymaster}
         find .
         bash -x ./z/bin/nixops-provision | tee $out/nixops-provision.log
+        aws ec2 describe-instances | wc -l
         ./z/bin/validate-infrastructure | tee $out/validate-infrastructure.log
       '';
     };
