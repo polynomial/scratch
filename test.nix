@@ -10,6 +10,7 @@ let
   pkgs = import <nixpkgs> {};
   nix = pkgs.nix;
   bash = pkgs.bash;
+  strace = pkgs.strace;
   openssh = pkgs.openssh;
   jq = pkgs.jq;
   nixops = pkgs.nixopsUnstable;
@@ -26,6 +27,7 @@ in rec {
       buildInputs = [
         nix
         bash
+        strace
         openssh
         nixops
         awscli
