@@ -60,7 +60,6 @@ in rec {
         set
         cd ${keymaster}
         echo "$AWS_ACCESS_KEY_ID $AWS_SECRET_ACCESS_KEY dev" >$HOME/.ec2-keys
-        id
         bash -x ./z/bin/nixops-provision | tee $out/nixops-provision.log
         ./z/bin/validate-infrastructure | tee $out/validate-infrastructure.log
       '';
