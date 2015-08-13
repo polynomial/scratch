@@ -2,7 +2,7 @@
 , keymaster
 , root
 , nixpkgs
-, officialRelease ? true
+, officialRelease ? false
 }:
 
 let
@@ -37,6 +37,7 @@ in rec {
         set -x
         mkdir -p $out
         cd ${root}
+        find .
         date >$out/date
         source z/setup/env.sh
         declare -r -x Z_DEPLOYMENT_TMPDIR=/tmp/$$
