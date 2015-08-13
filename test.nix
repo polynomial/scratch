@@ -52,7 +52,8 @@ in rec {
         declare -r -x Z_DEPLOYMENT_PROFILE="singlenode"
         declare -r -x USER=$(whoami)
         declare -r -x NIX_PATH="nixpkgs=${nixpkgs}:lookout=${pipeline}/channels/lookout"
-        declare -r -x NIXOPS_STATE="$Z_DEPLOYMENT_TMPDIR/state.nixops"
+        #declare -r -x NIXOPS_STATE="$Z_DEPLOYMENT_TMPDIR/state.nixops"
+        declare -r -x NIXOPS_STATE="/tmp/18091/state.nixops"
         source /etc/hydra/ec2.environment
         #declare -r -x AWS_ACCESS_KEY_ID="$(curl --silent http://169.254.169.254/latest/meta-data/iam/security-credentials/ci-deploy | jq '.AccessKeyId' |sed 's/"//g')"
         #declare -r -x AWS_SECRET_ACCESS_KEY="$(curl --silent http://169.254.169.254/latest/meta-data/iam/security-credentials/ci-deploy | jq '.SecretAccessKey' |sed 's/"//g')"
@@ -60,8 +61,8 @@ in rec {
         set
         cd ${keymaster}
         echo "$AWS_ACCESS_KEY_ID $AWS_SECRET_ACCESS_KEY dev" >$HOME/.ec2-keys
-        bash -x ./z/bin/nixops-provision | tee $out/nixops-provision.log
-        ./z/bin/validate-infrastructure | tee $out/validate-infrastructure.log
+        #bash -x ./z/bin/nixops-provision | tee $out/nixops-provision.log
+        bash -x ./z/bin/validate-infrastructure | tee $out/validate-infrastructure.log
       '';
     };
 }
