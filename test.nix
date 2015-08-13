@@ -2,6 +2,7 @@
 , keymaster
 , root
 , nixpkgs
+, pipeline
 , officialRelease ? false
 }:
 
@@ -51,7 +52,7 @@ in rec {
         declare -r -x Z_DEPLOYMENT_TARGET="ec2"
         declare -r -x Z_DEPLOYMENT_PROFILE="singlenode"
         declare -r -x USER=hydra
-        declare -r -x NIX_PATH="nixpkgs=${nixpkgs}"
+        declare -r -x NIX_PATH="nixpkgs=${nixpkgs}:lookout=${pipeline}/channels/lookout"
         declare -r -x NIXOPS_STATE="$Z_DEPLOYMENT_TMPDIR/state.nixops"
         source /etc/hydra/ec2.environment
         #declare -r -x AWS_ACCESS_KEY_ID="$(curl --silent http://169.254.169.254/latest/meta-data/iam/security-credentials/ci-deploy | jq '.AccessKeyId' |sed 's/"//g')"
