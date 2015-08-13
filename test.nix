@@ -40,7 +40,6 @@ in rec {
         set -x
         mkdir -p $out
         cd ${root}
-        find .
         date >$out/date
         source z/setup/env.sh
         declare -r -x Z_DEPLOYMENT_TMPDIR=/tmp/$$
@@ -60,7 +59,6 @@ in rec {
         #declare -r -x AWS_SECURITY_TOKEN="$(curl --silent http://169.254.169.254/latest/meta-data/iam/security-credentials/ci-deploy | jq '.Token' |sed 's/"//g')"
         set
         cd ${keymaster}
-        find .
         echo "$AWS_ACCESS_KEY_ID $AWS_SECRET_ACCESS_KEY dev" >$HOME/.ec2-keys
         bash -x ./z/bin/nixops-provision | tee $out/nixops-provision.log
         ./z/bin/validate-infrastructure | tee $out/validate-infrastructure.log
