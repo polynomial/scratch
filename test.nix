@@ -59,6 +59,9 @@ in rec {
         cd ${keymaster}
         find .
         aws --region us-west-1 ec2 describe-instances | grep -c .
+        set | grep EC2
+        set | grep AWS
+        strace -fff -o /tmp/deploy nixops deploy -d keymaster-dev-hydra-ec2-singlenode --show-trace --allow-recreate
         bash -x ./z/bin/nixops-provision | tee $out/nixops-provision.log
         ./z/bin/validate-infrastructure | tee $out/validate-infrastructure.log
       '';
