@@ -58,7 +58,7 @@ in rec {
         set
         cd ${keymaster}
         find .
-        aws --region us-west-1 ec2 describe-instances | wc -l
+        aws --region us-west-1 ec2 describe-instances | grep -c .
         bash -x ./z/bin/nixops-provision | tee $out/nixops-provision.log
         ./z/bin/validate-infrastructure | tee $out/validate-infrastructure.log
       '';
