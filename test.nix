@@ -48,7 +48,7 @@ let
         # here until ci hooks pass this in
         declare -rx Z_REMOTE_REF="$(git rev-parse HEAD)"
         ./z/bin/nixops-provision 2>&1 | tee "$out/log/provision.log"
-        ./z/bin/validate-infrastructure 2>&1 | tee "$out/log/validate.log"
+        bash -x ./z/bin/validate-infrastructure 2>&1 | tee "$out/log/validate.log"
         nixops ssh keymasterApp 'curl --silent --show-error --fail \
           --retry 30 --retry-delay 5 \
           http://localhost:3000/health.json  \
