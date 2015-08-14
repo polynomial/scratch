@@ -64,7 +64,7 @@ in rec {
         echo "$AWS_ACCESS_KEY_ID $AWS_SECRET_ACCESS_KEY dev" >$HOME/.ec2-keys
         ./z/bin/nixops-provision | tee $out/nixops-provision.log
         ./z/bin/validate-infrastructure | tee $out/validate-infrastructure.log
-        nixops ssh -d keymasterApp 'curl --silent --show-error --fail http://localhost:3000/health.json  | jq .'
+        nixops ssh keymasterApp 'curl --silent --show-error --fail http://localhost:3000/health.json  | jq .'
       '';
     };
 }
