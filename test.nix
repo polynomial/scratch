@@ -63,8 +63,8 @@ in rec {
         git_commitish=$(git rev-parse HEAD)
         echo "git commit $git_commitish"
         echo "$AWS_ACCESS_KEY_ID $AWS_SECRET_ACCESS_KEY dev" >$HOME/.ec2-keys
-        #./z/bin/nixops-provision | tee $out/nixops-provision.log
-        #./z/bin/validate-infrastructure | tee $out/validate-infrastructure.log
+        ./z/bin/nixops-provision | tee $out/nixops-provision.log
+        ./z/bin/validate-infrastructure | tee $out/validate-infrastructure.log
       '';
     };
 }
