@@ -4,67 +4,70 @@
 , nixpkgs
 , pipeline
 , officialRelease ? false
+, pkgs ? import <nixpkgs> {}
 }:
 
 let
 
-  pkgs = import <nixpkgs> {};
-  nix = pkgs.nix;
-  bash = pkgs.bash;
-  git = pkgs.git;
-  strace = pkgs.strace;
-  openssh = pkgs.openssh;
-  jq = pkgs.jq;
-  nixops = pkgs.nixopsUnstable;
-  awscli = pkgs.awscli;
-  curl = pkgs.curl;
+  inherit (pkgs) stdenv lib runCommand nix bash git openssh jq nixopsUnstable curl;
 
-in rec {
-
-  release =
-    with import <nixpkgs> { };
-  
-  
-    stdenv.mkDerivation {
-      buildInputs = [
+  provisionJob = tag:
+    lib.hydraJob (runCommand "keymaster-${tag}" {
+      buildInputs = with nixpkgs; [
         nix
         bash
         git
         openssh
-        nixops
+        nixopsUnstable
         curl
         jq
-        #strace
-        #awscli
       ];
-      name = "keymaster-release";
       buildCommand = ''
-        mkdir -p $out
-        cd ${root}
-        date >$out/date
-        declare -r -x Z_DEPLOYMENT_TMPDIR=/tmp/$$
+        set -ex
+        mkdir -p $out $out/log $out/db $out/nix-support
+
+        declare -rx Z_DEPLOYMENT_TMPDIR="$(mktemp -d -t "$name.XXXXX.$$")"
         mkdir -p $Z_DEPLOYMENT_TMPDIR
         declare -x HOME=$Z_DEPLOYMENT_TMPDIR
-        declare -r -x DD_AGENT_KEY=null
-        declare -r -x NIX_REMOTE=daemon
-        declare -r -x Z_DEPLOYMENT_ENV_TYPE="dev"
-        declare -r -x Z_DEPLOYMENT_TARGET="ec2"
-        declare -r -x Z_DEPLOYMENT_PROFILE="singlenode"
-        declare -r -x USER=$(whoami)
-        declare -r -x NIX_PATH="nixpkgs=${nixpkgs}:lookout=${pipeline}/channels/lookout"
-        declare -r -x NIXOPS_STATE="$Z_DEPLOYMENT_TMPDIR/state.nixops"
+        declare -rx DD_AGENT_KEY=null
+        declare -rx NIX_REMOTE=daemon
+        declare -rx Z_DEPLOYMENT_ENV_TYPE="dev"
+        declare -rx Z_DEPLOYMENT_TARGET="ec2"
+        declare -rx Z_DEPLOYMENT_PROFILE="singlenode"
+        declare -rx NIX_PATH="nixpkgs=${nixpkgs}:lookout=${pipeline}/channels/lookout"
+        declare -rx NIXOPS_STATE="$Z_DEPLOYMENT_TMPDIR/state.nixops"
+        declare -rx Z_REMOTE_USER=jenkins
+
+        pushd "${root}"
         source z/setup/env.sh
         source /etc/hydra/ec2.environment
-        #declare -r -x AWS_ACCESS_KEY_ID="$(curl --silent http://169.254.169.254/latest/meta-data/iam/security-credentials/ci-deploy | jq '.AccessKeyId' |sed 's/"//g')"
-        #declare -r -x AWS_SECRET_ACCESS_KEY="$(curl --silent http://169.254.169.254/latest/meta-data/iam/security-credentials/ci-deploy | jq '.SecretAccessKey' |sed 's/"//g')"
-        #declare -r -x AWS_SECURITY_TOKEN="$(curl --silent http://169.254.169.254/latest/meta-data/iam/security-credentials/ci-deploy | jq '.Token' |sed 's/"//g')"
-        cd ${keymaster}
-        git_commitish=$(git rev-parse HEAD)
-        #echo "git commit $git_commitish"
-        echo "$AWS_ACCESS_KEY_ID $AWS_SECRET_ACCESS_KEY dev" >$HOME/.ec2-keys
-        ./z/bin/nixops-provision | tee $out/nixops-provision.log
-        ./z/bin/validate-infrastructure | tee $out/validate-infrastructure.log
-        nixops ssh keymasterApp 'curl --silent --show-error --fail http://localhost:3000/health.json  | jq .'
+        echo "$AWS_ACCESS_KEY_ID $AWS_SECRET_ACCESS_KEY dev" > "$HOME/.ec2-keys"
+        popd
+
+        pushd "${keymaster}"
+        # here until ci hooks pass this in
+        declare -rx Z_REMOTE_REF="$(git rev-parse HEAD)"
+        ./z/bin/nixops-provision | tee "$out/log/provision.log"
+        ./z/bin/validate-infrastructure | tee "$out/log/validate.log"
+        nixops ssh keymasterApp 'curl --silent --show-error --fail \
+          --retry 30 --retry-delay 5 \
+          http://localhost:3000/health.json  \
+          | jq -r .' > "$out/log/keymaster-health.json" 2>&1
+        cp "$NIXOPS_STATE" "$out/db/keymaster.nixops"
+        set > "$out/log/env.log"
+        ssh gerrit.flexilis.local -- gerrit review "$Z_REMOTE_REF" --message Validated
       '';
-    };
+    } ''
+      {
+        echo "file keymaster-health.json $out/log/keymaster-health.json"
+        echo "file keymaster.nixops $out/db/keymaster.nixops"
+        echo "file provision.log $out/log/provision.log"
+        echo "file validate.log $out/log/validate.log"
+        echo "file env.log $out/log/env.log"
+      } > $out/nix-support/hydra-build-products
+      popd
+    '');
+
+in {
+  infrastructure = provisionJob "release";
 }
