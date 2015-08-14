@@ -11,6 +11,7 @@ let
   pkgs = import <nixpkgs> {};
   nix = pkgs.nix;
   bash = pkgs.bash;
+  git = pkgs.git;
   strace = pkgs.strace;
   openssh = pkgs.openssh;
   jq = pkgs.jq;
@@ -28,6 +29,7 @@ in rec {
       buildInputs = [
         nix
         bash
+        git
         openssh
         nixops
         curl
