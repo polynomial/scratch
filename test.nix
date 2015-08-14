@@ -60,7 +60,7 @@ in rec {
         #declare -r -x AWS_SECURITY_TOKEN="$(curl --silent http://169.254.169.254/latest/meta-data/iam/security-credentials/ci-deploy | jq '.Token' |sed 's/"//g')"
         cd ${keymaster}
         git_commitish=$(git rev-parse HEAD)
-        echo "git commit $git_commitish"
+        #echo "git commit $git_commitish"
         echo "$AWS_ACCESS_KEY_ID $AWS_SECRET_ACCESS_KEY dev" >$HOME/.ec2-keys
         ./z/bin/nixops-provision | tee $out/nixops-provision.log
         ./z/bin/validate-infrastructure | tee $out/validate-infrastructure.log
