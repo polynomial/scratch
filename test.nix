@@ -23,7 +23,7 @@ let
         jq
       ];
       buildCommand = ''
-        set -ex
+        set -e
         mkdir -p $out $out/log $out/db $out/nix-support
 
         declare -rx Z_DEPLOYMENT_TMPDIR="$(mktemp -d -t "$name.XXXXX.$$")"
