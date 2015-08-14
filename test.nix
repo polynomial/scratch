@@ -33,13 +33,12 @@ in rec {
         openssh
         nixops
         curl
+        jq
         #strace
         #awscli
-        #jq
       ];
       name = "keymaster-release";
       buildCommand = ''
-        set -x
         mkdir -p $out
         cd ${root}
         date >$out/date
@@ -65,6 +64,7 @@ in rec {
         echo "$AWS_ACCESS_KEY_ID $AWS_SECRET_ACCESS_KEY dev" >$HOME/.ec2-keys
         ./z/bin/nixops-provision | tee $out/nixops-provision.log
         ./z/bin/validate-infrastructure | tee $out/validate-infrastructure.log
+        nixops ssh -d keymasterApp 'curl --silent --show-error --fail http://localhost:3000/health.json  | jq .'
       '';
     };
 }
