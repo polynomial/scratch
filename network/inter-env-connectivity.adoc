@@ -1,0 +1,44 @@
+== Inter-environment Connectivity Proposals
+:Author: Ben Smith
+:toc:
+
+While it is best to keep different environments discrete there are a few cases
+where this can be cost prohibitive. There are two current suggestions for
+allowing connectivity between multiple environments. The tradeoffs of each is
+discussed below.
+
+=== Route Based
+
+This solution extends the routes advertised by an envirnoment into other
+environments that need it. This would consist of having a `VPN` link
+between routers in both environments that we wish to connect. They would
+advertise routes that they can reach to their peer. This approach has
+several benefits:
+
+* simplest to implement (uses only existing technology and design)
+* makes trouble-shooting easier (no obscurity of source or dest)
+* failure doesn't cause session loss
+
+It has several areas that may be of concern:
+
+* production now will have routing tables that know about other environments
+* addition of non-production environments will cause `modification` of
+  production environment tables
+
+=== NAT Based
+
+This solution leverages a design similar to how load balancers are placed in
+a network. Where connections are 'terminated' and then new connections are
+originated with a different source. This solution has several benefits:
+
+* production will have no knowledge of other environments
+* no routing changes in any environment propogate to another environment
+* active traffic view of what is currently talking between environments
+
+It has several areas of concern too:
+
+* device failure will force session re-establishment
+* it can make troubleshooting require an extra step of looking at flow data.
+  This is currently the case with load balancers already.
+* the NAT session table has boundaries (although they are significantly
+  smaller than our current traffic requirements)
