@@ -29,7 +29,10 @@ It has several areas that may be of concern:
 
 This solution leverages a design similar to how load balancers are placed in
 a network. Where connections are 'terminated' and then new connections are
-originated with a different source. This solution has several benefits:
+originated with a different source. This would involve having a set of 
+'Load Balancer' like devices in a `DMZ`. These would `VPN` to both
+environments. They would terminate connections and NAT requests to their
+intended destination. This solution has several benefits:
 
 * production will have no knowledge of other environments
 * no routing changes in any environment propogate to another environment
